@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include <math.h>
-
+#include <fstream>
 
 namespace str {
 	std::vector<std::string> &split(const std::string &s, const char delim, std::vector<std::string> &outVec) {
@@ -101,7 +101,7 @@ namespace nmea {
 			break;
 		case Packet::Type::UNKNOWN:
 		default:
-			abort();
+			//abort();
 			break;
 		}
 		return p;
@@ -136,11 +136,21 @@ namespace nmea {
 
 }
 
-
 int main(int argc, char *argv[]) {
-	auto p = nmea::parseSentence("$GPRMC,082804.683,A,5205.9421,N,00506.4368,E,0.02,146.61,190408,,*0C $GPBDG,082804.683,A,52.09904,5.10728,0.02,146.61,1,190408,*73");
+//	auto p = nmea::parseSentence("$GPRMC,171804.000,A,5111.8502,N,00626.1751,E,0.07,46.02,280913,,,A*58");
 //	auto p = nmea::parseSentence("$GPGGA,082804.683,5205.9421,N,00506.4368,E,1,03,3.0,0.3,M,,,,0000*01");
-
-	nmea::printPacket(p);
+//	nmea::printPacket(p);
+	std::ifstream infile("/dev/ttyUSB0");
+	std::string line;
+	while (std::getline(infile, line)) {
+		if (line[0] != '$') {
+			continue;
+		}
+		auto p = nmea::parseSentence(line);
+		if (p.type == nmea::Packet::Type::GPRMC) {
+			printf("%s\n", line.c_str());
+			nmea::printPacket(p);
+		}
+	}
 	return 0;
 }

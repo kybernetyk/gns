@@ -1,6 +1,7 @@
 #include "nav.h"
 #include <math.h>
 #include <stdio.h>
+#include "termbox/src/termbox.h"
 
 namespace math {
 	float rad2deg(float rad) {
@@ -58,6 +59,12 @@ namespace nav {
 }
 
 int main(int argc, char **argv) {
+	int ret = tb_init();
+	if (ret) {
+		fprintf(stderr, "tb_init() failed with error code %d\n", ret);
+		return 1;
+	}
+
 	float or_lat =  51.197487;
 	float or_lon = 6.436220; 
 
@@ -69,4 +76,7 @@ int main(int argc, char **argv) {
 
 	printf("dist: %f\n", dist);
 	printf("head: %f\n", head);
+
+	tb_shutdown();
 }
+

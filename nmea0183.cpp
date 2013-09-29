@@ -135,7 +135,7 @@ namespace nmea {
 	}
 
 }
-
+#if 0
 int main(int argc, char *argv[]) {
 //	auto p = nmea::parseSentence("$GPRMC,171804.000,A,5111.8502,N,00626.1751,E,0.07,46.02,280913,,,A*58");
 //	auto p = nmea::parseSentence("$GPGGA,082804.683,5205.9421,N,00506.4368,E,1,03,3.0,0.3,M,,,,0000*01");
@@ -154,3 +154,4 @@ int main(int argc, char *argv[]) {
 	}
 	return 0;
 }
+#endif

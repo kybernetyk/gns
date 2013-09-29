@@ -22,4 +22,7 @@ namespace nmea {
 		float speed;
 		float heading;
 	};
+	
+
+	Packet parseSentence(const std::string &sentence);
 }

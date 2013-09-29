@@ -4,6 +4,8 @@
 #include <sys/ioctl.h>
 #include <sys/time.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include "nmea_device.h"
 
 float g_fps = 0.0;
 
@@ -33,22 +35,38 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "tb_init() failed with error code %d\n", ret);
 		return 1;
 	}
-	main_screen::Screen ms;
+	
+	nmea::Device gps_device;
+	gps_device.initWithPathAndPreferredPacketType("data_dump", nmea::Packet::Type::GPRMC);
 
+	main_screen::Screen ms;
+	ms.setDestination(51.20242,6.410733);
 	ms.draw();
 
 	tb_event ev;
-	bool cont = true;
+	bool cont = true; //continue execution? 
 
+	//fps
 	float fps = 10;
 	long delay_millisecs = (1.0 / fps) * 1000;
 	long delay_microsecs = delay_millisecs * 1000;
-	
+
+	//timing
 	timeval time_diff;
 	timeval timer;
 	timeval last_timer;
 	gettimeofday(&last_timer, NULL);
-	
+
+	std::thread gps_update_thread([&gps_device, &cont]() {
+			for (;;) {
+				gps_device.update();
+				usleep(1000);
+				if (!cont) {
+					break;
+				}
+			}
+	});
+
 	while (cont) {
 		if (tb_peek_event(&ev, delay_millisecs) > 0) {
 			switch (ev.type) {
@@ -63,22 +81,28 @@ int main(int argc, char **argv) {
 							cont = false;
 							break;
 					}
-					ms.handleEvent(ev);
 					break;
 				default:
-					ms.handleEvent(ev);
 					break;
 			}
+			ms.handleEvent(ev);
 		}
 
+		//update screen if fps threshold reached
 		gettimeofday(&timer, NULL);
 		time_diff = timeval_subtract(timer, last_timer);
 		if ((time_diff.tv_usec + time_diff.tv_sec * 1e6) >= delay_microsecs) { 			
 			gettimeofday(&last_timer, NULL);
 			g_fps = (1.0 / (time_diff.tv_usec + time_diff.tv_sec * 1e6)) * 1e6;
+
+			auto p = gps_device.mostCurrentPacket();
+			ms.setLocation(p.coords.lat, p.coords.lon);
 			ms.draw();
 		}
 	}
+
+	//wait for our update thread to die
+	gps_update_thread.join();
 
 	tb_shutdown();
 }

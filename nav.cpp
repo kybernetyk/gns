@@ -1,6 +1,7 @@
 #include "nav.h"
 #include <math.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "termbox/src/termbox.h"
 
 namespace math {

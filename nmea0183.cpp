@@ -65,7 +65,6 @@ namespace nmea {
 		m[Packet::Type::GPRMC] = "GPRMC";
 		m[Packet::Type::UNKNOWN] = "UNKNOWN";
 		return m.at(type);
-
 	}
 
 	void fillPacket_GPRMC(const std::vector<std::string> &v, Packet &p) {
@@ -111,7 +110,6 @@ namespace nmea {
 		auto elems = tokenizeSentence(sentence);
 		auto p = makePacket(elems);
 		return p;
-
 	}
 	
 	void printPacket(const Packet &p) {
@@ -131,7 +129,6 @@ namespace nmea {
 		if (packetHasUTC(p)) {
 			printf("\tUTC: %s\n", p.utc_timestamp.c_str());
 		}
-
 	}
 
 }

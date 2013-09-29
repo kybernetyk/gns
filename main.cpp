@@ -5,27 +5,27 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 
-timeval timeval_subtract (timeval *x, timeval *y) {
-	if (x->tv_usec < y->tv_usec) {
-			 int nsec = (y->tv_usec - x->tv_usec) / 1000000 + 1;
-			 y->tv_usec -= 1000000 * nsec;
-			 y->tv_sec += nsec;
+float g_fps = 0.0;
+
+timeval timeval_subtract (timeval x, timeval y) {
+	if (x.tv_usec < y.tv_usec) {
+			 int nsec = (y.tv_usec - x.tv_usec) / 1000000 + 1;
+			 y.tv_usec -= 1000000 * nsec;
+			 y.tv_sec += nsec;
 	 }
-	 if (x->tv_usec - y->tv_usec > 1000000) {
-			 int nsec = (x->tv_usec - y->tv_usec) / 1000000;
-			 y->tv_usec += 1000000 * nsec;
-			 y->tv_sec -= nsec;
+	 if (x.tv_usec - y.tv_usec > 1000000) {
+			 int nsec = (x.tv_usec - y.tv_usec) / 1000000;
+			 y.tv_usec += 1000000 * nsec;
+			 y.tv_sec -= nsec;
 	 }
 	
 	 timeval result;
 		 /* Compute the time remaining to wait.
 				tv_usec is certainly positive. */
-	 result.tv_sec = x->tv_sec - y->tv_sec;
-	 result.tv_usec = x->tv_usec - y->tv_usec;
+	 result.tv_sec = x.tv_sec - y.tv_sec;
+	 result.tv_usec = x.tv_usec - y.tv_usec;
 	 return result;
 }
-
-float g_fps = 0;
 
 int main(int argc, char **argv) {
 	int ret = tb_init();
@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 		}
 
 		gettimeofday(&timer, NULL);
-		time_diff = timeval_subtract(&timer, &last_timer);
+		time_diff = timeval_subtract(timer, last_timer);
 		if ((time_diff.tv_usec + time_diff.tv_sec * 1e6) >= delay_microsecs) { 			
 			gettimeofday(&last_timer, NULL);
 			g_fps = (1.0 / (time_diff.tv_usec + time_diff.tv_sec * 1e6)) * 1e6;

@@ -8,6 +8,7 @@
 namespace nmea {
 	class Device {
 	public:
+		~Device();
 		bool initWithPathAndPreferredPacketType(std::string path, nmea::Packet::Type preferredPacketType);
 		
 		//this will block until a packet of the preferred type is read!
@@ -20,7 +21,7 @@ namespace nmea {
 		nmea::Packet m_cachedPacket;
 		nmea::Packet::Type m_preferredPacketType;
 		std::mutex m_lock;
-		std::ifstream m_ifstream;
+		FILE *m_fin;
 	};
 	
 }

@@ -2,5 +2,5 @@
 # this is better than make and friends!
 
 clang -c termbox/src/*.c
-clang++ -stdlib=libc++ -o gns -std=c++11 *.o *.cpp
+clang++ -I/usr/include/c++/v1/ -std=c++11 -stdlib=libc++ -lpthread -lc++ -o gns *.cpp *.o
 rm *.o

@@ -19,8 +19,10 @@ namespace main_screen {
 		float head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
 
 		print_tb("Press <ESC> or <q> to exit", 0, 0, TB_WHITE, TB_DEFAULT);
-		printf_tb(4,2, TB_GREEN, TB_DEFAULT, "dist: %f", dist);
-		printf_tb(4,3, TB_GREEN, TB_DEFAULT, "head:  %f", head);
+		printf_tb(4,2, TB_GREEN, TB_DEFAULT, "curr lat: %f lon: %f", or_lat, or_lon);
+		printf_tb(4,3, TB_GREEN, TB_DEFAULT, "dest lat: %f lon: %f", dest_lat, dest_lon);
+		printf_tb(4,5, TB_GREEN, TB_DEFAULT, "dist: %f", dist);
+		printf_tb(4,6, TB_GREEN, TB_DEFAULT, "head:  %f", head);
 
 		printf_tb(4,20, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
 

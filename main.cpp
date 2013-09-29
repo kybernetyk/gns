@@ -30,15 +30,18 @@ timeval timeval_subtract (timeval x, timeval y) {
 }
 
 int main(int argc, char **argv) {
+	nmea::Device gps_device;
+	if (!gps_device.initWithPathAndPreferredPacketType("/dev/ttyUSB0", nmea::Packet::Type::GPRMC)) {
+		printf("couldn't init /dev/ttyUSB0!\nrun as root plox\n");
+		return 23;
+	}
+
 	int ret = tb_init();
 	if (ret) {
 		fprintf(stderr, "tb_init() failed with error code %d\n", ret);
 		return 1;
 	}
 	
-	nmea::Device gps_device;
-	gps_device.initWithPathAndPreferredPacketType("data_dump", nmea::Packet::Type::GPRMC);
-
 	main_screen::Screen ms;
 	ms.setDestination(51.20242,6.410733);
 	ms.draw();
@@ -47,7 +50,7 @@ int main(int argc, char **argv) {
 	bool cont = true; //continue execution? 
 
 	//fps
-	float fps = 10;
+	float fps = 30;
 	long delay_millisecs = (1.0 / fps) * 1000;
 	long delay_microsecs = delay_millisecs * 1000;
 

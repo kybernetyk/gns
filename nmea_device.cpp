@@ -9,13 +9,12 @@ namespace nmea {
 		}
 		
 		void Device::update() {
-#ifdef DUMMY_DEVICE
-		auto p = nmea::parseSentence("$GPRMC,171804.000,A,5111.8502,N,00626.1751,E,0.07,46.02,280913,,,A*58");
-		std::lock_guard<std::mutex> lk(m_lock);
-		m_cachedPacket = p;
-#else
+			//yes this locking will pretty much lead to single thread execution
+			//but who cares? we're doing only 4800 baud anyway
 			std::string line;
-			while (std::getline(m_ifstream, line)) {
+			int max_line_count = 255; //number of lines to read without hitting the preferred target
+			int line_count = 0;
+			while (line_count++ < max_line_count && std::getline(m_ifstream, line)) {
 				if (line[0] != '$') {
 					continue;
 				}
@@ -24,9 +23,9 @@ namespace nmea {
 				if (p.type == m_preferredPacketType) { 		
 					std::lock_guard<std::mutex> lk(m_lock);
 					m_cachedPacket = p;	
+					break;
 				}
 			}
-#endif
 		}
 		
 		nmea::Packet Device::mostCurrentPacket() {

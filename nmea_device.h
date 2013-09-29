@@ -9,6 +9,9 @@ namespace nmea {
 	class Device {
 	public:
 		bool initWithPathAndPreferredPacketType(std::string path, nmea::Packet::Type preferredPacketType);
+		
+		//this will block until a packet of the preferred type is read!
+		//preferrably call this from a seperate thread
 		void update();
 		
 		nmea::Packet mostCurrentPacket();

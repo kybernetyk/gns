@@ -2,15 +2,20 @@ Ghetto GPS Navigation System
 ----------------------------
 Because turn by turn is for losers!
 
+
 Features:
 	- System like in Crazy Taxi / GTA - just an arrow showing the general direction to the destination
+	- Arrival time is specified by user. No estimation. You just enter a hard time limit when you have to be there and if you don't make it you lose. Encourages reckless driving in cities. Win!
 	- Elitesque ASCII Art output
-	- Works on my machine
+	- Works on my machine, which is a pretty damn nice Toughbook that would survive a nuclear war
+
 
 Deps:
-	- Linux (any Ubonto will do)
-	- A NMEA 0183 copilant GPS Mouse 
-	- Balls
+	- Linux (any Ubonto will do) in text mode
+	- Clang with C++11 support (3.2 svn+ should do it)
+	- A NMEA 0183 compilant GPS Mouse 
+	- A NMEA 0183 compilant compass (I built my own from scrap metal and homeless Arduinos)
+	- Balls to use it
 
 
 License:

@@ -1,0 +1,19 @@
+Ghetto GPS Navigation System
+----------------------------
+Because turn by turn is for losers!
+
+Features:
+	- System like in Crazy Taxi / GTA - just an arrow showing the general direction to the destination
+	- Elitesque ASCII Art output
+	- Works on my machine
+
+Deps:
+	- Linux (any Ubonto will do)
+	- A NMEA 0183 copilant GPS Mouse 
+	- Balls
+
+
+License:
+	GPL3, (c) Leon Szpilewski
+	Respective copyrights by the original authors apply to "borrowed" code.
+

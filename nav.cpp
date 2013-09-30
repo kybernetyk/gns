@@ -1,19 +1,6 @@
 #include "nav.h"
+#include "tbutil.h"
 #include <math.h>
-
-namespace math {
-	float rad2deg(float rad) {
-		return (180.0 * rad / (M_PI));
-	}
-
-	float deg2rad(float deg) {
-		return (M_PI * deg / 180.0);
-	}
-
-	inline float sq(float n) {
-		return n * n;
-	}
-}
 
 namespace nav {
 	float distance_between(float lat1, float lon1, float lat2, float lon2) {

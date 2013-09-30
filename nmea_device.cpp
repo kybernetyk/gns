@@ -43,7 +43,7 @@ namespace nmea {
 				return;
 			}
 			std::string line;
-			int max_line_count = 16; //number of lines to read without hitting the preferred target
+			int max_line_count = 1; //number of lines to read without hitting the preferred target
 			int line_count = 0;
 			while (line_count++ < max_line_count) {
 				line = readline(m_fin);

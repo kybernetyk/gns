@@ -15,10 +15,19 @@ namespace main_screen {
 		void setLocation(float lat, float lon) {
 			m_location = {.lat = lat, .lon = lon};
 		}
-		
+
+		void setHeading(float deg) {
+			m_heading = deg;
+		}
+
+		void setSpeed(float speed) {
+			m_speed = speed;
+		}
 
 	private:
 		nmea::GeoCoords m_location;
+		float m_heading;
+		float m_speed;
 		nmea::GeoCoords m_destination;
 	};
 

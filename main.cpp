@@ -100,6 +100,8 @@ int main(int argc, char **argv) {
 
 			auto p = gps_device.mostCurrentPacket();
 			ms.setLocation(p.coords.lat, p.coords.lon);
+			ms.setHeading(p.heading);
+			ms.setSpeed(p.speed);
 			ms.draw();
 		}
 	}

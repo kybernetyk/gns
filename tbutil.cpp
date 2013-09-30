@@ -23,4 +23,18 @@ void printf_tb(int x, int y, uint16_t fg, uint16_t bg, const char *fmt, ...) {
 	print_tb(buf, x, y, fg, bg);
 }
 
+namespace math {
+	float rad2deg(float rad) {
+		return (180.0 * rad / (M_PI));
+	}
+
+	float deg2rad(float deg) {
+		return (M_PI * deg / 180.0);
+	}
+
+	float sq(float n) {
+		return n * n;
+	}
+}
+
 

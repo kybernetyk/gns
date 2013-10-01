@@ -23,5 +23,6 @@ namespace nmea {
 	};
 	
 
+	bool packetHasHeading(const Packet &p);
 	Packet parseSentence(const std::string &sentence);
 }

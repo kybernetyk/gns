@@ -211,11 +211,11 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 	int h = 0;
 	void Screen::draw() {
 		tb_clear();
-		m_heading = h--;
+/*		m_heading = h--;
 		if (h < 0) {
 			h = 359;
 		}
-
+*/
 		bool may_sound = false;
 		if (fabs(m_lastHeading - m_heading) > 20.0) {
 			m_lastHeading = m_heading;

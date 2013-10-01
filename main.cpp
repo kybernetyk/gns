@@ -44,7 +44,8 @@ int main(int argc, char **argv) {
 	}
 	
 	main_screen::Screen ms;
-	ms.setDestination(51.20242,6.410733);
+//	ms.setDestination(51.20242,6.410733);
+	ms.setDestination(51.197445,6.436332);
 	ms.draw();
 
 	tb_event ev;

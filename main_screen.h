@@ -27,6 +27,7 @@ namespace main_screen {
 	private:
 		nmea::GeoCoords m_location;
 		float m_heading;
+		float m_lastHeading = 0.0;
 		float m_speed;
 		nmea::GeoCoords m_destination;
 	};

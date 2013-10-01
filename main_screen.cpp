@@ -4,6 +4,7 @@
 #include "nav.h"
 #include <math.h>
 #include <cmath>
+#include "audio.h"
 
 extern float g_fps;
 #define sgn(x) ((x<0)?-1:((x>0)?1:0)) 
@@ -121,6 +122,35 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 //		tb_change_cell(x + lx, y + ly, '+', TB_YELLOW, TB_RED);
 	}
 
+	void draw_rotating_compass2(float cur_heading, float desired_heading) {
+		float x = 24;
+		float y = 30;
+		float r = 12;
+
+		draw_circle(x, y, r);
+//		print_tb("--v--", x-2, y - r - 1, TB_BLACK, TB_WHITE);
+
+		//'rotate' the compass
+		float diff = 0.0 - cur_heading;
+
+		float lx, ly;
+		coords_on_circle(0.0 + diff, r, lx, ly);
+		tb_change_cell(x + lx, y + ly, 'N', TB_WHITE, TB_DEFAULT);
+		coords_on_circle(90.0 + diff, r, lx, ly);
+		tb_change_cell(x + lx, y + ly, 'E', TB_WHITE, TB_DEFAULT);
+		coords_on_circle(180.0 + diff, r, lx, ly);
+		tb_change_cell(x + lx, y + ly, 'S', TB_WHITE, TB_DEFAULT);
+		coords_on_circle(270.0 + diff, r, lx, ly);
+		tb_change_cell(x + lx, y + ly, 'W', TB_WHITE, TB_DEFAULT);
+
+		desired_heading += diff;
+		cur_heading += diff;
+
+		draw_line_to_heading(x, y, r, TB_YELLOW, cur_heading) ;
+		coords_on_circle(desired_heading, r, lx, ly);
+		tb_change_cell(x + lx, y + ly, '+', TB_YELLOW, TB_RED);
+	}
+
 	void draw_compass(float cur_heading, float desired_heading) {
 		float x = 70;
 		float y = 30;
@@ -144,6 +174,35 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		print_tb("DEST", x + lx, y + ly, TB_BLACK, TB_WHITE);
 	}
 
+	void play_sound(float cur_head, float desired_head) {
+			float diff = 0.0 - desired_head;
+			cur_head += diff;
+
+
+			if (cur_head > 350 ||
+					cur_head < 10) {
+				audio::play("ping.wav");
+				return;
+			}
+
+			if (cur_head > 170 && cur_head < 190) {
+				audio::play("bzz.wav");
+				return;
+			}
+/*
+			float diff = (m_heading - desired_head);
+			if (diff > 140) {
+				audio::play("bzz2.wav");
+			} else if (diff > 100) {
+				audio::play("bzz.wav");
+			} else if (diff > 10) {
+				audio::play("beep.wav");
+			} else if (diff >= 0.0) {
+			}
+			*/
+
+			printf_tb(10, 10, TB_WHITE, TB_DEFAULT, "CUR_H: %f", cur_head);
+	}
 
 	int h = 0;
 	void Screen::draw() {
@@ -151,6 +210,11 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		m_heading = h--;
 		if (h < 0) {
 			h = 359;
+		}
+		bool may_sound = false;
+		if (fabs(m_lastHeading - m_heading) > 20.0) {
+			m_lastHeading = m_heading;
+			may_sound = true;
 		}
 
 		float or_lat = m_location.lat;
@@ -160,19 +224,24 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		float dest_lon = m_destination.lon; 
 
 		float dist = nav::distance_between(or_lat, or_lon, dest_lat, dest_lon);
-		float head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
+		float desired_head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
 
 		print_tb("Press <ESC> or <q> to exit", 0, 1, TB_WHITE, TB_DEFAULT);
 		printf_tb(4,2, TB_GREEN, TB_DEFAULT, "curr lat: %f lon: %f", or_lat, or_lon);
 		printf_tb(4,3, TB_GREEN, TB_DEFAULT, "dest lat: %f lon: %f", dest_lat, dest_lon);
 		printf_tb(4,5, TB_GREEN, TB_DEFAULT, "dist: %f meters", dist);
 		printf_tb(4,8, TB_GREEN, TB_DEFAULT, "current head: %f", m_heading);
-		printf_tb(4,9, TB_GREEN, TB_DEFAULT, "desired head: %f", head);
+		printf_tb(4,9, TB_GREEN, TB_DEFAULT, "desired head: %f", desired_head);
 		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %f knots", m_speed);
 		printf_tb(0,0, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
 
-		draw_rotating_compass(m_heading, head);
-		draw_compass(m_heading, head);
+/*		if (may_sound) {
+			play_sound(m_heading, desired_head);
+		}
+*/
+
+		draw_rotating_compass2(m_heading, desired_head);
+		draw_compass(m_heading, desired_head);
 
 		tb_present();
 	}

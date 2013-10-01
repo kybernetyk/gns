@@ -9,6 +9,8 @@ namespace nmea {
 				printf("opening '%s' failed!\n", path.c_str());
 				return false;
 			}
+			m_cachedPacket.speed = 0;
+			m_cachedPacket.heading = 0;
 			m_preferredPacketType = preferredPacketType;
 			return true;
 		}
@@ -53,7 +55,11 @@ namespace nmea {
 				auto p = nmea::parseSentence(line);
 				if (p.type == m_preferredPacketType) { 		
 					std::lock_guard<std::mutex> lk(m_lock);
+					auto tp = m_cachedPacket;
 					m_cachedPacket = p;	
+					if (nmea::packetHasHeading(p) && m_cachedPacket.speed < 4.0) {
+						m_cachedPacket.heading = tp.heading;
+					}
 					return;
 				}
 			}

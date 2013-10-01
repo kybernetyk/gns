@@ -149,6 +149,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		draw_line_to_heading(x, y, r, TB_YELLOW, cur_heading) ;
 		coords_on_circle(desired_heading, r, lx, ly);
 		tb_change_cell(x + lx, y + ly, '+', TB_YELLOW, TB_RED);
+		print_tb("DEST", x + lx, y + ly, TB_BLACK, TB_WHITE);
 	}
 
 	void draw_compass(float cur_heading, float desired_heading) {
@@ -175,33 +176,36 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 	}
 
 	void play_sound(float cur_head, float desired_head) {
+			//lol who needs math if one can have if?
+			//calc a difference that is 0..180 
 			float diff = 0.0 - desired_head;
 			cur_head += diff;
+			if (cur_head < 0.0) {
+				cur_head = 360 + cur_head;
+			}
+			if (cur_head > 180) {
+				cur_head = fabs(cur_head - 360);
+			}
 
 
-			if (cur_head > 350 ||
-					cur_head < 10) {
+			if (cur_head < 20) {
+				audio::play("beep.wav");
+				return;
+			}
+			if (cur_head < 60) {
 				audio::play("ping.wav");
 				return;
 			}
 
-			if (cur_head > 170 && cur_head < 190) {
+			if (cur_head > 150) {
 				audio::play("bzz.wav");
 				return;
 			}
-/*
-			float diff = (m_heading - desired_head);
-			if (diff > 140) {
+			if (cur_head > 120) {
 				audio::play("bzz2.wav");
-			} else if (diff > 100) {
-				audio::play("bzz.wav");
-			} else if (diff > 10) {
-				audio::play("beep.wav");
-			} else if (diff >= 0.0) {
+				return;
 			}
-			*/
-
-			printf_tb(10, 10, TB_WHITE, TB_DEFAULT, "CUR_H: %f", cur_head);
+			//printf_tb(10, 10, TB_WHITE, TB_DEFAULT, "CUR_H: %f", cur_head);
 	}
 
 	int h = 0;
@@ -211,6 +215,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		if (h < 0) {
 			h = 359;
 		}
+
 		bool may_sound = false;
 		if (fabs(m_lastHeading - m_heading) > 20.0) {
 			m_lastHeading = m_heading;
@@ -226,6 +231,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		float dist = nav::distance_between(or_lat, or_lon, dest_lat, dest_lon);
 		float desired_head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
 
+
 		print_tb("Press <ESC> or <q> to exit", 0, 1, TB_WHITE, TB_DEFAULT);
 		printf_tb(4,2, TB_GREEN, TB_DEFAULT, "curr lat: %f lon: %f", or_lat, or_lon);
 		printf_tb(4,3, TB_GREEN, TB_DEFAULT, "dest lat: %f lon: %f", dest_lat, dest_lon);
@@ -235,10 +241,11 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %f knots", m_speed);
 		printf_tb(0,0, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
 
-/*		if (may_sound) {
+
+		if (may_sound) {
 			play_sound(m_heading, desired_head);
 		}
-*/
+
 
 		draw_rotating_compass2(m_heading, desired_head);
 		draw_compass(m_heading, desired_head);

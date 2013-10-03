@@ -5,3 +5,7 @@
 
 //linux
 //#define DEVICE_PATH "/dev/ttyUSB0"
+
+//destination coordinates
+#define DEST_LAT 51.202499f
+#define DEST_LON 6.410629f

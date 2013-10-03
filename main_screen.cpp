@@ -216,12 +216,6 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 			h = 359;
 		}
 */
-		bool may_sound = false;
-		if (fabs(m_lastHeading - m_heading) > 20.0) {
-			m_lastHeading = m_heading;
-			may_sound = true;
-		}
-
 		float or_lat = m_location.lat;
 		float or_lon = m_location.lon;
 
@@ -231,6 +225,16 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		float dist = nav::distance_between(or_lat, or_lon, dest_lat, dest_lon);
 		float desired_head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
 
+		m_distanceTraveled += fabs(m_lastDistance - dist);
+		m_lastDistance = dist;
+
+		bool may_sound = false;
+		if (fabs(m_lastHeading - m_heading) > 20.0 ||
+				m_distanceTraveled > 20.0) {
+			m_lastHeading = m_heading;
+			m_distanceTraveled = 0.0;
+			may_sound = true;
+		}
 
 		print_tb("Press <ESC> or <q> to exit", 0, 1, TB_WHITE, TB_DEFAULT);
 		printf_tb(4,2, TB_GREEN, TB_DEFAULT, "curr lat: %f lon: %f", or_lat, or_lon);

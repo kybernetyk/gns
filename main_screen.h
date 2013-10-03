@@ -11,7 +11,7 @@ namespace main_screen {
 		void setDestination(float lat, float lon) {
 			m_destination = {.lat = lat, .lon = lon};
 		}
-		
+
 		void setLocation(float lat, float lon) {
 			m_location = {.lat = lat, .lon = lon};
 		}
@@ -29,6 +29,8 @@ namespace main_screen {
 		float m_heading;
 		float m_lastHeading = 0.0;
 		float m_speed;
+		float m_lastDistance = 0.0;
+		float m_distanceTraveled = 0.0;
 		nmea::GeoCoords m_destination;
 	};
 

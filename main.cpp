@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "nmea_device.h"
 #include "audio.h"
+#include "config.h"
 
 float g_fps = 0.0;
 
@@ -32,8 +33,8 @@ timeval timeval_subtract (timeval x, timeval y) {
 
 int main(int argc, char **argv) {
 	nmea::Device gps_device;
-	if (!gps_device.initWithPathAndPreferredPacketType("/dev/ttyUSB0", nmea::Packet::Type::GPRMC)) {
-		printf("couldn't init /dev/ttyUSB0!\nrun as root plox\n");
+	if (!gps_device.initWithPathAndPreferredPacketType(DEVICE_PATH, nmea::Packet::Type::GPRMC)) {
+		printf("couldn't init %s!\nrun as root plox\n", DEVICE_PATH);
 		return 23;
 	}
 

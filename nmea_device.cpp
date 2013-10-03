@@ -1,7 +1,7 @@
 #include "nmea_device.h"
 #include <stdio.h>
 #include <sys/param.h>
-#include <sys/filio.h>
+//#include <sys/filio.h>
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>

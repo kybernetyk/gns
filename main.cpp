@@ -32,6 +32,7 @@ timeval timeval_subtract (timeval x, timeval y) {
 }
 
 int main(int argc, char **argv) {
+	audio::play("bzz.wav");
 	nmea::Device gps_device;
 	if (!gps_device.initWithPathAndPreferredPacketType(DEVICE_PATH, nmea::Packet::Type::GPRMC)) {
 		printf("couldn't init %s!\nrun as root plox\n", DEVICE_PATH);

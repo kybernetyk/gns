@@ -9,7 +9,11 @@ namespace audio {
 	std::vector<std::thread> _threads;
 
 	void playthread(std::string filename) {
+#ifdef __APPLE__
+			std::string cmdline = "afplay ";
+#else
 			std::string cmdline = "aplay -q ";
+#endif
 			cmdline += filename;
 			cmdline += " > /dev/null 2>&1";
 			system(cmdline.c_str());

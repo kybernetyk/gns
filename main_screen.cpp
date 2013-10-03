@@ -225,9 +225,12 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		float dist = nav::distance_between(or_lat, or_lon, dest_lat, dest_lon);
 		float desired_head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
 
-		m_distanceTraveled += fabs(m_lastDistance - dist);
-		m_lastDistance = dist;
-
+		float distdiff = fabs(m_lastDistance - dist);
+		if (m_speed > 1.0) {
+			m_distanceTraveled += distdiff; 
+			m_lastDistance = dist;
+		}
+		
 		bool may_sound = false;
 		if (fabs(m_lastHeading - m_heading) > 20.0 ||
 				m_distanceTraveled > 20.0) {
@@ -245,6 +248,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %f knots", m_speed);
 		printf_tb(0,0, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
 
+		printf_tb(4,12, TB_YELLOW, TB_DEFAULT, "fm_distanceTraveled: %f", m_distanceTraveled);
 
 		if (may_sound) {
 			play_sound(m_heading, desired_head);

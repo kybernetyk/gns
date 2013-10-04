@@ -41,7 +41,9 @@ namespace nmea {
 				return false;
 			}
 			int fd = fileno(m_fin);
-			config_serial_port(fd);
+			if (config_serial_port(fd) != 0) {
+				return false;
+			}
 			m_cachedPacket.speed = 0;
 			m_cachedPacket.heading = 0;
 			m_preferredPacketType = preferredPacketType;
@@ -85,6 +87,7 @@ namespace nmea {
 				if (line[0] != '$') {
 					continue;
 				}
+				//printf("%s\n", line.c_str());
 				auto p = nmea::parseSentence(line);
 				if (p.type == m_preferredPacketType) { 		
 					std::lock_guard<std::mutex> lk(m_lock);

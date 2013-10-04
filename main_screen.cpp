@@ -175,7 +175,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		print_tb("DEST", x + lx, y + ly, TB_BLACK, TB_WHITE);
 	}
 
-	void play_sound(float cur_head, float desired_head) {
+	void Screen::play_sound(float cur_head, float desired_head) {
 			//lol who needs math if one can have if?
 			//calc a difference that is 0..180 
 			float diff = 0.0 - desired_head;
@@ -189,20 +189,20 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 
 
 			if (cur_head < 20) {
-				audio::play("beep.wav");
+				m_player.play("beep.wav");
 				return;
 			}
 			if (cur_head < 60) {
-				audio::play("ping.wav");
+				m_player.play("ping.wav");
 				return;
 			}
 
 			if (cur_head > 150) {
-				audio::play("bzz.wav");
+				m_player.play("bzz.wav");
 				return;
 			}
 			if (cur_head > 120) {
-				audio::play("bzz2.wav");
+				m_player.play("bzz2.wav");
 				return;
 			}
 			//printf_tb(10, 10, TB_WHITE, TB_DEFAULT, "CUR_H: %f", cur_head);

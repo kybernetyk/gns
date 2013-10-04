@@ -1,5 +1,6 @@
 #pragma once
 #include "nmea0183.h"
+#include "audio.h"
 #include "termbox/src/termbox.h"
 
 namespace main_screen {
@@ -23,8 +24,11 @@ namespace main_screen {
 		void setSpeed(float speed) {
 			m_speed = speed;
 		}
+	protected:
+		void play_sound(float cur_head, float desired_head);
 
 	private:
+		audio::Player m_player;
 		nmea::GeoCoords m_location;
 		float m_heading;
 		float m_lastHeading = 0.0;

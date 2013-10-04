@@ -1,7 +1,7 @@
 #pragma once
 
 //os x, 2nd usb port
-#define DEVICE_PATH "/dev/cu.PL2303-00002006"
+#define DEVICE_PATH "/dev/cu.PL2303-00001004"
 
 //linux
 //#define DEVICE_PATH "/dev/ttyUSB0"

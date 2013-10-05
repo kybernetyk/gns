@@ -226,7 +226,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		float desired_head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
 
 		float distdiff = fabs(m_lastDistance - dist);
-		if (m_speed > 1.0) {
+		if (m_speed >= 1.0) {
 			m_distanceTraveled += distdiff; 
 			m_lastDistance = dist;
 		}
@@ -245,7 +245,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		printf_tb(4,5, TB_GREEN, TB_DEFAULT, "dist: %f meters", dist);
 		printf_tb(4,8, TB_GREEN, TB_DEFAULT, "current head: %f", m_heading);
 		printf_tb(4,9, TB_GREEN, TB_DEFAULT, "desired head: %f", desired_head);
-		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %f knots", m_speed);
+		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %f m/s", m_speed);
 		printf_tb(0,0, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
 
 		printf_tb(4,12, TB_YELLOW, TB_DEFAULT, "fm_distanceTraveled: %f", m_distanceTraveled);

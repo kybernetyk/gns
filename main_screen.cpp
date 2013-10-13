@@ -102,7 +102,7 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		float r = 12;
 
 
-		const char *str = "Destination on 12 o'clock";
+		const char *str = "Bring DEST to needle!";
 		print_tb(str, x - strlen(str)/2, y - r - 2, TB_WHITE, TB_DEFAULT);
 
 		draw_circle(x, y, r);
@@ -137,6 +137,10 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		float x = 70;
 		float y = 30;
 		float r = 12;
+
+		const char *str = "Bring needle to DEST!";
+		print_tb(str, x - strlen(str)/2, y - r - 2, TB_WHITE, TB_DEFAULT);
+
 		draw_circle(x, y, r);
 
 		float lx, ly;
@@ -189,11 +193,11 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 	int h = 0;
 	void Screen::draw() {
 		tb_clear();
-/*		m_heading = h--;
+		m_heading = h--;
 		if (h < 0) {
 			h = 359;
 		}
-*/
+
 		float or_lat = m_location.lat;
 		float or_lon = m_location.lon;
 
@@ -202,6 +206,8 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 
 		float dist = nav::distance_between(or_lat, or_lon, dest_lat, dest_lon);
 		float desired_head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
+
+		desired_head = 90.0f;
 
 		float distdiff = fabs(m_lastDistance - dist);
 		if (m_speed >= 1.0) {

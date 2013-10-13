@@ -3,7 +3,7 @@
 
 #ifdef __APPLE__
 	//os x, 2nd usb port
-	#define DEVICE_PATH "/dev/cu.PL2303-00001004"
+	#define DEVICE_PATH "/dev/cu.PL2303-00002006"
 #else
 	//linux
 	#define DEVICE_PATH "/dev/ttyUSB0"

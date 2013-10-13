@@ -189,11 +189,11 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 
 
 			if (cur_head < 20) {
-				m_player.play("beep.wav");
+				m_player.play("ping.wav");
 				return;
 			}
 			if (cur_head < 60) {
-				m_player.play("ping.wav");
+				m_player.play("beep.wav");
 				return;
 			}
 

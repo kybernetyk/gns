@@ -93,39 +93,17 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		line_slow(cx,cy, cx + x, cy + y, col); 
 	}
 
+	/*
+	 * draws compass with dest_heading on the 12 o'clock position
+	 */
 	void draw_rotating_compass(float cur_heading, float desired_heading) {
 		float x = 24;
 		float y = 30;
 		float r = 12;
 
-		draw_circle(x, y, r);
-		print_tb("--v--", x-2, y - r - 1, TB_BLACK, TB_WHITE);
 
-		//'rotate' the compass
-		float diff = 0.0 - cur_heading;
-
-		float lx, ly;
-		coords_on_circle(0.0 + diff, r, lx, ly);
-		tb_change_cell(x + lx, y + ly, 'N', TB_WHITE, TB_DEFAULT);
-		coords_on_circle(90.0 + diff, r, lx, ly);
-		tb_change_cell(x + lx, y + ly, 'E', TB_WHITE, TB_DEFAULT);
-		coords_on_circle(180.0 + diff, r, lx, ly);
-		tb_change_cell(x + lx, y + ly, 'S', TB_WHITE, TB_DEFAULT);
-		coords_on_circle(270.0 + diff, r, lx, ly);
-		tb_change_cell(x + lx, y + ly, 'W', TB_WHITE, TB_DEFAULT);
-
-		desired_heading += diff;
-		cur_heading += diff;
-
-		draw_line_to_heading(x, y, r, TB_YELLOW, desired_heading) ;
-//		coords_on_circle(desired_heading, r, lx, ly);
-//		tb_change_cell(x + lx, y + ly, '+', TB_YELLOW, TB_RED);
-	}
-
-	void draw_rotating_compass2(float cur_heading, float desired_heading) {
-		float x = 24;
-		float y = 30;
-		float r = 12;
+		const char *str = "Destination on 12 o'clock";
+		print_tb(str, x - strlen(str)/2, y - r - 2, TB_WHITE, TB_DEFAULT);
 
 		draw_circle(x, y, r);
 //		print_tb("--v--", x-2, y - r - 1, TB_BLACK, TB_WHITE);
@@ -152,7 +130,10 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		print_tb("DEST", x + lx, y + ly, TB_BLACK, TB_WHITE);
 	}
 
-	void draw_compass(float cur_heading, float desired_heading) {
+	/*
+	 * draws compass with North on the 12 o'clock position
+	 */
+	void draw_fixed_compass(float cur_heading, float desired_heading) {
 		float x = 70;
 		float y = 30;
 		float r = 12;
@@ -176,7 +157,6 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 	}
 
 	void Screen::play_sound(float cur_head, float desired_head) {
-			//lol who needs math if one can have if?
 			//calc a difference that is 0..180 
 			float diff = 0.0 - desired_head;
 			cur_head += diff;
@@ -186,7 +166,6 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 			if (cur_head > 180) {
 				cur_head = fabs(cur_head - 360);
 			}
-
 
 			if (cur_head < 20) {
 				m_player.play("ping.wav");
@@ -205,7 +184,6 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 				m_player.play("bzz2.wav");
 				return;
 			}
-			//printf_tb(10, 10, TB_WHITE, TB_DEFAULT, "CUR_H: %f", cur_head);
 	}
 
 	int h = 0;
@@ -248,15 +226,15 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %f m/s", m_speed);
 		printf_tb(0,0, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
 
-		printf_tb(4,12, TB_YELLOW, TB_DEFAULT, "fm_distanceTraveled: %f", m_distanceTraveled);
+		printf_tb(4,13, TB_YELLOW, TB_DEFAULT, "m_distanceTraveled: %f", m_distanceTraveled);
 
 		if (may_sound) {
 			play_sound(m_heading, desired_head);
 		}
 
 
-		draw_rotating_compass2(m_heading, desired_head);
-		draw_compass(m_heading, desired_head);
+		draw_rotating_compass(m_heading, desired_head);
+		draw_fixed_compass(m_heading, desired_head);
 
 		tb_present();
 	}

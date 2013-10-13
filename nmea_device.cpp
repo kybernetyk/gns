@@ -75,8 +75,8 @@ namespace nmea {
 			//yes this locking will pretty much lead to single thread execution
 			//but who cares? we're doing only 4800 baud anyway
 			if (!m_fin) {
-				printf("file handle not initialized!\n");
-				abort();
+				fprintf(stderr, "This device is not initialized!\n");
+				//abort();
 				return;
 			}
 			std::string line;

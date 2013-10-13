@@ -34,8 +34,8 @@ timeval timeval_subtract (timeval x, timeval y) {
 int main(int argc, char **argv) {
 	nmea::Device gps_device;
 	if (!gps_device.initWithPathAndPreferredPacketType(DEVICE_PATH, nmea::Packet::Type::GPRMC)) {
-		printf("couldn't init %s!\nrun as root plox\n", DEVICE_PATH);
-		return 23;
+		fprintf(stderr, "couldn't init %s!\nrun as root plox\n", DEVICE_PATH);
+		//return 23;
 	}
 
 	int ret = tb_init();

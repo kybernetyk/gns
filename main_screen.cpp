@@ -206,33 +206,33 @@ void line_slow(int x1, int y1, int x2, int y2, uint16_t col) {
 
 		float dist = nav::distance_between(or_lat, or_lon, dest_lat, dest_lon);
 		float desired_head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
-
-		desired_head = 90.0f;
+		
+		float kmh = m_speed * 3.6;
 
 		float distdiff = fabs(m_lastDistance - dist);
 		if (m_speed >= 1.0) {
-			m_distanceTraveled += distdiff; 
+			m_distanceTravelled += distdiff; 
 			m_lastDistance = dist;
 		}
 		
 		bool may_sound = false;
 		if (fabs(m_lastHeading - m_heading) > 20.0 ||
-				m_distanceTraveled > 20.0) {
+				m_distanceTravelled > 50.0) {
 			m_lastHeading = m_heading;
-			m_distanceTraveled = 0.0;
+			m_distanceTravelled = 0.0;
 			may_sound = true;
 		}
 
+		printf_tb(0,0, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
 		print_tb("Press <ESC> or <q> to exit", 0, 1, TB_WHITE, TB_DEFAULT);
 		printf_tb(4,2, TB_GREEN, TB_DEFAULT, "curr lat: %f lon: %f", or_lat, or_lon);
 		printf_tb(4,3, TB_GREEN, TB_DEFAULT, "dest lat: %f lon: %f", dest_lat, dest_lon);
 		printf_tb(4,5, TB_GREEN, TB_DEFAULT, "dist: %f meters", dist);
 		printf_tb(4,8, TB_GREEN, TB_DEFAULT, "current head: %f", m_heading);
 		printf_tb(4,9, TB_GREEN, TB_DEFAULT, "desired head: %f", desired_head);
-		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %f m/s", m_speed);
-		printf_tb(0,0, TB_YELLOW, TB_DEFAULT, "fps: %f", g_fps);
-
-		printf_tb(4,13, TB_YELLOW, TB_DEFAULT, "m_distanceTraveled: %f", m_distanceTraveled);
+		printf_tb(4,11, TB_GREEN, TB_DEFAULT, "current speed: %.2f m/s => %.2f km/h", m_speed, kmh);
+		printf_tb(4,12, TB_YELLOW, TB_DEFAULT, "m_distanceTravelled: %.2f meters", m_distanceTravelled);
+		printf_tb(4,13, TB_YELLOW, TB_DEFAULT, "Total travelled Distance: %.2f meters", m_distanceTravelledTotal);
 
 		if (may_sound) {
 			play_sound(m_heading, desired_head);

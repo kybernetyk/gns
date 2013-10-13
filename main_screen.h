@@ -34,7 +34,8 @@ namespace main_screen {
 		float m_lastHeading = 0.0;
 		float m_speed;
 		float m_lastDistance = 0.0;
-		float m_distanceTraveled = 0.0;
+		float m_distanceTravelled = 0.0; //for signal sound playback
+		float m_distanceTravelledTotal = 0.0f; //total distance travelled this session
 		nmea::GeoCoords m_destination;
 	};
 

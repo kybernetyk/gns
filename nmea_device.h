@@ -23,5 +23,4 @@ namespace nmea {
 		std::mutex m_lock;
 		FILE *m_fin;
 	};
-	
 }

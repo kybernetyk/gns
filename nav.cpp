@@ -1,20 +1,6 @@
 #include "nav.h"
+#include "tbutil.h"
 #include <math.h>
-#include <stdio.h>
-
-namespace math {
-	float rad2deg(float rad) {
-		return (180.0 * rad / (M_PI));
-	}
-
-	float deg2rad(float deg) {
-		return (M_PI * deg / 180.0);
-	}
-
-	inline float sq(float n) {
-		return n * n;
-	}
-}
 
 namespace nav {
 	float distance_between(float lat1, float lon1, float lat2, float lon2) {
@@ -57,16 +43,3 @@ namespace nav {
 	}
 }
 
-int main(int argc, char **argv) {
-	float or_lat =  51.197487;
-	float or_lon = 6.436220; 
-
-	float dest_lat = 51.20248;
-	float dest_lon = 6.410682;
-
-	float dist = nav::distance_between(or_lat, or_lon, dest_lat, dest_lon);
-	float head = nav::heading_fromto(or_lat, or_lon, dest_lat, dest_lon);
-
-	printf("dist: %f\n", dist);
-	printf("head: %f\n", head);
-}

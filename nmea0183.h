@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 
 namespace nmea {
@@ -22,4 +21,8 @@ namespace nmea {
 		float speed;
 		float heading;
 	};
+	
+
+	bool packetHasHeading(const Packet &p);
+	Packet parseSentence(const std::string &sentence);
 }

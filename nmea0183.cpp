@@ -68,6 +68,9 @@ namespace nmea {
 	}
 
 	void fillPacket_GPRMC(const std::vector<std::string> &v, Packet &p) {
+		if (v.size() < 9) {
+			return;
+		}
 		p.utc_timestamp = v[1]; 
 		p.coords.lat = atof(v[3].c_str());
 		p.coords.lat = p.coords.lat / 100.0;

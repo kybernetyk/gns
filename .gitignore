@@ -1,3 +1,5 @@
 a.out
 gns
 *.o
+stderr.log
+stdout.log

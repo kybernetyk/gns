@@ -35,11 +35,12 @@ namespace audio {
 				doWork();
 			}
 		});
+		m_playThread.detach();
 	}
 	
 	Player::~Player() {
 		m_keepWorking.store(false);
-		m_playThread.join();
+//		m_playThread.join();
 	}
 
 	void Player::play(std::string filename) {

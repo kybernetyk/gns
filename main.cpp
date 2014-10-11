@@ -66,12 +66,13 @@ int main(int argc, char **argv) {
 	std::thread gps_update_thread([&gps_device, &cont]() {
 			for (;;) {
 				gps_device.update();
-				usleep(1000);
+				usleep(1000); //this_thread::sleep
 				if (!cont) {
 					break;
 				}
 			}
 	});
+	gps_update_thread.detach();
 
 	while (cont) {
 		if (tb_peek_event(&ev, delay_millisecs) > 0) {
@@ -101,7 +102,7 @@ int main(int argc, char **argv) {
 			gettimeofday(&last_timer, NULL);
 			g_fps = (1.0 / (time_diff.tv_usec + time_diff.tv_sec * 1e6)) * 1e6;
 
-			auto p = gps_device.mostCurrentPacket();
+			auto p = gps_device.mostCurrentPacket().get();
 			ms.setLocation(p.coords.lat, p.coords.lon);
 			ms.setHeading(p.heading);
 			ms.setSpeed(p.speed*0.514444444444f); //convert to m/s
@@ -109,8 +110,6 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	//wait for our update thread to die
-	gps_update_thread.join();
 	tb_shutdown();
 }
 
